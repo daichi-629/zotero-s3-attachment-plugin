@@ -1,7 +1,7 @@
 {
   "name": "zotero-s3-sync",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha.1",
   "description": "Zotero plugin for storing attachment files on Amazon S3",
   "config": {
     "addonName": "Zotero S3 Sync",

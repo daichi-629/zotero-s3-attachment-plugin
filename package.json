@@ -12,13 +12,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/daichi-629/zotero-s3-attachment.git"
+    "url": "https://github.com/daichi-629/zotero-s3-attachment-plugin.git"
   },
   "author": "daichi-629",
   "bugs": {
-    "url": "https://github.com/daichi-629/zotero-s3-attachment/issues"
+    "url": "https://github.com/daichi-629/zotero-s3-attachment-plugin/issues"
   },
-  "homepage": "https://github.com/daichi-629/zotero-s3-attachment#readme",
+  "homepage": "https://github.com/daichi-629/zotero-s3-attachment-plugin#readme",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "zotero-plugin serve",

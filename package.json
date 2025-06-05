@@ -30,7 +30,7 @@
     "lint:check": "prettier --check . && eslint .",
     "lint:fix": "prettier --write . && eslint . --fix",
     "release": "zotero-plugin release",
-    "test": "jest --testPathPattern=src/__tests__",
+    "test": "jest --testPathPattern=src/__tests__  --runInBand --detectOpenHandles --forceExit",
     "update-deps": "npm update --save"
   },
   "dependencies": {

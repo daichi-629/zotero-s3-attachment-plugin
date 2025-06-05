@@ -4,30 +4,552 @@
 <groupbox
   onload="Zotero.__addonInstance__.hooks.onPrefsEvent('load', { window });"
 >
-  <label><html:h2 data-l10n-id="pref-title"></html:h2></label>
-  <checkbox
-    id="zotero-prefpane-__addonRef__-enable"
-    preference="enable"
-    data-l10n-id="pref-enable"
-  />
-  <hbox>
+  <label>
+    <html:h2 data-l10n-id="pref-title">S3互換ストレージ設定</html:h2>
+  </label>
+
+  <!-- ストレージプロバイダー選択 -->
+  <hbox align="center">
     <html:label
-      for="zotero-prefpane-__addonRef__-input"
-      data-l10n-id="pref-input"
-    ></html:label>
+      for="zotero-prefpane-__addonRef__-provider"
+      data-l10n-id="pref-storage-provider"
+    >
+    </html:label>
+    <menulist id="zotero-prefpane-__addonRef__-provider">
+      <menupopup>
+        <menuitem
+          data-l10n-id="pref-provider-aws"
+          label="Amazon S3"
+          value="aws"
+        />
+        <menuitem
+          data-l10n-id="pref-provider-r2"
+          label="Cloudflare R2"
+          value="r2"
+        />
+        <menuitem
+          data-l10n-id="pref-provider-minio"
+          label="MinIO"
+          value="minio"
+        />
+        <menuitem
+          data-l10n-id="pref-provider-custom"
+          label="カスタムS3互換"
+          value="custom"
+        />
+      </menupopup>
+    </menulist>
+  </hbox>
+
+  <!-- Access Key ID -->
+  <hbox align="center">
+    <html:label
+      for="zotero-prefpane-__addonRef__-access-key"
+      style="min-width: 120px"
+      data-l10n-id="pref-access-key"
+    >
+      Access Key ID:
+    </html:label>
     <html:input
       type="text"
-      id="zotero-prefpane-__addonRef__-input"
-      preference="input"
-    ></html:input>
+      id="zotero-prefpane-__addonRef__-access-key"
+      style="flex: 1"
+      data-l10n-id="pref-access-key-placeholder"
+      data-l10n-attrs="placeholder"
+    />
   </hbox>
-  <hbox class="virtualized-table-container" flex="1" height="300px">
-    <html:div id="__addonRef__-table-container" />
+
+  <!-- Secret Access Key -->
+  <hbox align="center">
+    <html:label
+      for="zotero-prefpane-__addonRef__-secret-key"
+      style="min-width: 120px"
+      data-l10n-id="pref-secret-key"
+    >
+      Secret Access Key:
+    </html:label>
+    <html:input
+      type="password"
+      id="zotero-prefpane-__addonRef__-secret-key"
+      style="flex: 1"
+      data-l10n-id="pref-secret-key-placeholder"
+      data-l10n-attrs="placeholder"
+    />
   </hbox>
+
+  <!-- カスタムエンドポイント -->
+  <hbox align="center" id="zotero-prefpane-__addonRef__-endpoint-container">
+    <html:label
+      for="zotero-prefpane-__addonRef__-endpoint"
+      style="min-width: 120px"
+      data-l10n-id="pref-endpoint"
+    >
+    </html:label>
+    <html:input
+      type="text"
+      id="zotero-prefpane-__addonRef__-endpoint"
+      style="flex: 1"
+      data-l10n-id="pref-endpoint-placeholder"
+      data-l10n-attrs="placeholder"
+      placeholder="https://example.r2.cloudflarestorage.com"
+    />
+  </hbox>
+
+  <!-- リージョン -->
+  <hbox align="center" id="zotero-prefpane-__addonRef__-region-container">
+    <html:label
+      for="zotero-prefpane-__addonRef__-region"
+      style="min-width: 120px"
+      data-l10n-id="pref-region"
+    >
+    </html:label>
+    <html:input
+      type="text"
+      id="zotero-prefpane-__addonRef__-region"
+      style="flex: 1"
+      data-l10n-id="pref-region-placeholder"
+      data-l10n-attrs="placeholder"
+      placeholder="us-east-1"
+    />
+  </hbox>
+
+  <!-- バケット名 -->
+  <hbox align="center">
+    <html:label
+      for="zotero-prefpane-__addonRef__-bucket"
+      style="min-width: 120px"
+      data-l10n-id="pref-bucket"
+    >
+    </html:label>
+    <html:input
+      type="text"
+      id="zotero-prefpane-__addonRef__-bucket"
+      style="flex: 1"
+      data-l10n-id="pref-bucket-placeholder"
+      data-l10n-attrs="placeholder"
+      placeholder="my-zotero-bucket"
+    />
+  </hbox>
+
+  <!-- 公開URL設定 -->
+  <vbox
+    style="
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    "
+  >
+    <html:label
+      style="font-weight: bold; color: #0066cc"
+      data-l10n-id="pref-public-url-title"
+    ></html:label>
+
+    <!-- 公開URLタイプ選択 -->
+    <vbox style="margin-top: 5px">
+      <html:label
+        for="zotero-prefpane-__addonRef__-public-url-type"
+        style="font-size: 0.9em; margin-bottom: 8px"
+        data-l10n-id="pref-public-url-type"
+      >
+      </html:label>
+      <radiogroup id="zotero-prefpane-__addonRef__-public-url-type">
+        <radio
+          id="zotero-prefpane-__addonRef__-url-disabled"
+          value="disabled"
+          data-l10n-id="pref-url-disabled"
+          style="margin-bottom: 4px"
+        />
+        <radio
+          id="zotero-prefpane-__addonRef__-url-custom"
+          value="custom"
+          data-l10n-id="pref-url-custom"
+          style="margin-bottom: 4px"
+        />
+        <radio
+          id="zotero-prefpane-__addonRef__-url-r2dev"
+          value="r2dev"
+          data-l10n-id="pref-url-r2dev"
+          style="margin-bottom: 4px"
+        />
+      </radiogroup>
+    </vbox>
+
+    <!-- カスタムドメイン設定 -->
+    <vbox
+      id="zotero-prefpane-__addonRef__-custom-domain-settings"
+      style="margin-top: 10px"
+    >
+      <html:label
+        style="font-size: 0.9em; margin-bottom: 5px"
+        data-l10n-id="pref-custom-domain"
+      ></html:label>
+      <hbox align="center">
+        <html:input
+          type="text"
+          id="zotero-prefpane-__addonRef__-custom-domain"
+          style="flex: 1; margin-right: 8px"
+          data-l10n-id="pref-custom-domain-placeholder"
+          data-l10n-attrs="placeholder"
+          placeholder="files.example.com"
+        />
+        <button
+          id="zotero-prefpane-__addonRef__-test-custom-domain"
+          data-l10n-id="pref-test-custom-domain"
+        />
+      </hbox>
+
+      <!-- カスタムドメイン状態表示 -->
+      <html:div
+        id="zotero-prefpane-__addonRef__-custom-domain-status"
+        style="
+          margin-top: 8px;
+          padding: 8px;
+          border-radius: 3px;
+          font-size: 0.85em;
+          display: none;
+          background-color: #f8f9fa;
+          border: 1px solid #dee2e6;
+        "
+      >
+      </html:div>
+    </vbox>
+
+    <!-- R2開発URL設定 -->
+    <vbox
+      id="zotero-prefpane-__addonRef__-r2dev-settings"
+      style="margin-top: 10px"
+    >
+      <html:label
+        style="font-size: 0.9em; margin-bottom: 8px"
+        data-l10n-id="pref-r2dev-url-setting"
+      >
+      </html:label>
+      <hbox style="margin-bottom: 8px">
+        <button
+          id="zotero-prefpane-__addonRef__-enable-public-url"
+          data-l10n-id="pref-enable-public-url"
+        />
+      </hbox>
+      <html:div
+        style="
+          padding: 8px;
+          background-color: #fff3cd;
+          border: 1px solid #ffeaa7;
+          border-radius: 3px;
+          font-size: 0.85em;
+        "
+      >
+        <html:span style="color: #856404" data-l10n-id="pref-r2dev-info">
+        </html:span>
+      </html:div>
+    </vbox>
+
+    <!-- 公開URL自動保存設定 -->
+    <vbox
+      id="zotero-prefpane-__addonRef__-auto-save-settings"
+      style="margin-top: 12px"
+    >
+      <checkbox
+        id="zotero-prefpane-__addonRef__-auto-save-public-url"
+        data-l10n-id="pref-auto-save-public-url"
+      />
+    </vbox>
+
+    <!-- 公開URL設定保存ボタン -->
+    <hbox style="margin-top: 12px">
+      <button
+        id="zotero-prefpane-__addonRef__-save-public-url-settings"
+        data-l10n-id="pref-save-public-url-settings"
+      />
+    </hbox>
+
+    <!-- 説明文 -->
+    <html:div
+      style="
+        margin-top: 12px;
+        padding: 8px;
+        background-color: #e7f3ff;
+        border: 1px solid #b3d9ff;
+        border-radius: 3px;
+        font-size: 0.85em;
+      "
+    >
+      <html:p style="margin: 0; color: #0056b3">
+        <html:strong data-l10n-id="pref-public-url-info-title"></html:strong>
+        <html:br />
+        <span data-l10n-id="pref-public-url-info-custom"></span>
+        <html:br />
+        <span data-l10n-id="pref-public-url-info-r2dev"></span>
+        <html:br />
+        <span data-l10n-id="pref-public-url-info-storage"></span>
+        <html:br />
+        <span data-l10n-id="pref-public-url-info-setup"></span>
+        <html:a
+          href="https://developers.cloudflare.com/r2/buckets/public-buckets"
+          target="_blank"
+          data-l10n-id="pref-public-url-info-docs"
+        >
+        </html:a>
+      </html:p>
+    </html:div>
+  </vbox>
+
+  <!-- 除外するコンテンツタイプ -->
+  <vbox
+    style="
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    "
+  >
+    <html:label
+      style="font-weight: bold; color: #0066cc"
+      data-l10n-id="pref-exclude-title"
+    ></html:label>
+
+    <hbox align="center" style="margin-top: 5px">
+      <html:label
+        for="zotero-prefpane-__addonRef__-ignore-content-types"
+        style="min-width: 120px"
+        data-l10n-id="pref-exclude-content-types"
+      >
+      </html:label>
+      <html:textarea
+        id="zotero-prefpane-__addonRef__-ignore-content-types"
+        style="flex: 1; height: 80px; font-family: monospace"
+        data-l10n-id="pref-exclude-placeholder"
+        data-l10n-attrs="placeholder"
+        placeholder="application/pdf&#10;text/html&#10;image/jpeg"
+      />
+    </hbox>
+
+    <!-- 説明文 -->
+    <html:div
+      style="
+        margin-top: 8px;
+        padding: 8px;
+        background-color: #f0f8ff;
+        border-radius: 3px;
+        font-size: 0.85em;
+      "
+    >
+      <html:p style="margin: 0; color: #333">
+        <html:strong data-l10n-id="pref-exclude-info-title"></html:strong>
+        <html:br />
+        <span data-l10n-id="pref-exclude-info-line1"></span>
+        <html:br />
+        <span data-l10n-id="pref-exclude-info-line2"></span>
+        <html:br />
+        <span data-l10n-id="pref-exclude-info-line3"></span>
+        <html:br />
+        <span data-l10n-id="pref-exclude-info-line4"></span>
+      </html:p>
+    </html:div>
+  </vbox>
+
+  <!-- S3キー生成設定 -->
+  <vbox
+    style="
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    "
+  >
+    <html:label
+      style="font-weight: bold; color: #0066cc"
+      data-l10n-id="pref-s3key-title"
+    ></html:label>
+
+    <!-- コレクション階層を使用するオプション -->
+    <vbox style="margin-top: 5px">
+      <checkbox
+        id="zotero-prefpane-__addonRef__-use-collection-hierarchy"
+        data-l10n-id="pref-use-collection-hierarchy"
+      />
+    </vbox>
+
+    <!-- 説明文 -->
+    <html:div
+      style="
+        margin-top: 8px;
+        padding: 8px;
+        background-color: #f0f8ff;
+        border-radius: 3px;
+        font-size: 0.85em;
+      "
+    >
+      <html:p style="margin: 0; color: #333">
+        <html:strong data-l10n-id="pref-s3key-info-title"></html:strong>
+        <html:br />
+        <span data-l10n-id="pref-s3key-info-default"></span>
+        <html:br />
+        <span data-l10n-id="pref-s3key-info-hierarchy"></span>
+        <html:br />
+        <span data-l10n-id="pref-s3key-info-benefit"></span>
+        <html:br />
+        <span data-l10n-id="pref-s3key-info-uncategorized"></span>
+      </html:p>
+    </html:div>
+  </vbox>
+
+  <!-- Cloudflare APIトークン設定（R2の場合のみ表示） -->
+  <vbox
+    id="zotero-prefpane-__addonRef__-cloudflare-token-container"
+    style="
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    "
+  >
+    <html:label
+      style="font-weight: bold; color: #0066cc"
+      data-l10n-id="pref-cloudflare-r2-title"
+    >
+    </html:label>
+
+    <!-- Cloudflare APIトークン -->
+    <hbox align="center" style="margin-top: 5px">
+      <html:label
+        for="zotero-prefpane-__addonRef__-cloudflare-api-token"
+        style="min-width: 120px"
+        data-l10n-id="pref-cloudflare-api-token"
+      >
+      </html:label>
+      <html:input
+        type="password"
+        id="zotero-prefpane-__addonRef__-cloudflare-api-token"
+        style="flex: 1"
+        data-l10n-id="pref-cloudflare-api-token-placeholder"
+        data-l10n-attrs="placeholder"
+      />
+    </hbox>
+
+    <!-- APIトークン管理ボタン -->
+    <hbox style="margin-top: 5px">
+      <button
+        id="zotero-prefpane-__addonRef__-save-cloudflare-token"
+        data-l10n-id="pref-save-cloudflare-token"
+      />
+      <button
+        id="zotero-prefpane-__addonRef__-clear-cloudflare-token"
+        data-l10n-id="pref-clear-cloudflare-token"
+      />
+    </hbox>
+
+    <!-- APIトークン説明 -->
+    <html:div
+      style="
+        margin-top: 10px;
+        padding: 8px;
+        background-color: #f0f8ff;
+        border-radius: 3px;
+        font-size: 0.85em;
+      "
+    >
+      <html:p style="margin: 0; color: #333">
+        <html:strong data-l10n-id="pref-api-token-info-title"></html:strong>
+        <html:br />
+        <span data-l10n-id="pref-api-token-info-create"></span>
+        <html:br />
+        <span data-l10n-id="pref-api-token-info-benefit"></span>
+        <html:br />
+        <span data-l10n-id="pref-api-token-info-link"></span>
+        <html:a
+          href="https://developers.cloudflare.com/r2/api/tokens/"
+          target="_blank"
+          data-l10n-id="pref-api-token-docs"
+        >
+        </html:a>
+      </html:p>
+    </html:div>
+
+    <!-- R2権限設定ガイダンス -->
+    <html:div
+      style="
+        margin-top: 10px;
+        padding: 8px;
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 3px;
+        font-size: 0.85em;
+      "
+    >
+      <html:p style="margin: 0; color: #856404">
+        <html:strong data-l10n-id="pref-r2-permission-title"></html:strong>
+        <html:br />
+        <span data-l10n-id="pref-r2-permission-desc"></span>
+        <html:br />
+        <html:br />
+        <html:strong data-l10n-id="pref-r2-permission-required"></html:strong>
+        <html:br />
+        <span data-l10n-id="pref-r2-permission-delete"></span>
+        <html:br />
+        <span data-l10n-id="pref-r2-permission-list"></span>
+        <html:br />
+        <html:br />
+        <html:strong data-l10n-id="pref-r2-permission-policy"></html:strong>
+        <html:br />
+        <html:code
+          style="
+            display: block;
+            background-color: #f8f9fa;
+            padding: 8px;
+            margin: 4px 0;
+            border-radius: 3px;
+            font-family: monospace;
+            white-space: pre-wrap;
+          "
+        >
+          { "Effect": "Allow", "Action": [ "s3:PutObject", "s3:GetObject",
+          "s3:DeleteObject", "s3:ListBucket" ], "Resource": [
+          "arn:aws:s3:::YOUR_BUCKET_NAME/*", "arn:aws:s3:::YOUR_BUCKET_NAME" ]
+          }</html:code
+        >
+        <html:strong data-l10n-id="pref-r2-permission-important"></html:strong>
+        <span data-l10n-id="pref-r2-permission-resource"></span>
+        <html:br />
+        <span data-l10n-id="pref-r2-permission-detail"></span>
+        <html:a
+          href="https://github.com/directus/directus/issues/18171"
+          target="_blank"
+          data-l10n-id="pref-r2-permission-example"
+        >
+        </html:a>
+      </html:p>
+    </html:div>
+  </vbox>
+
+  <!-- ボタン群 -->
+  <hbox>
+    <button
+      id="zotero-prefpane-__addonRef__-test-connection"
+      data-l10n-id="pref-test-connection"
+    />
+    <button
+      id="zotero-prefpane-__addonRef__-save-settings"
+      data-l10n-id="pref-save-settings"
+    />
+    <button
+      id="zotero-prefpane-__addonRef__-clear-settings"
+      data-l10n-id="pref-clear-settings"
+    />
+  </hbox>
+
+  <!-- ステータス表示 -->
+  <html:div
+    id="zotero-prefpane-__addonRef__-status"
+    style="margin-top: 10px; padding: 5px; border-radius: 3px"
+  >
+  </html:div>
 </groupbox>
 <vbox>
   <html:label
-    data-l10n-id="pref-help"
-    data-l10n-args='{"time": "__buildTime__","name": "__addonName__","version":"__buildVersion__"}'
-  ></html:label>
+    style="font-size: 0.9em; color: #666"
+    data-l10n-id="pref-help-description"
+  >
+  </html:label>
 </vbox>

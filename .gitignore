@@ -14,3 +14,13 @@ tsconfig.tsbuildinfo
 .scaffold
 build
 logs
+
+test_pdf/
+
+.vscode/
+
+coverage/
+
+*.map
+
+src/**/*.d.ts

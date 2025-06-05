@@ -1,46 +1,59 @@
 {
-  "name": "zotero-plugin-template",
+  "name": "zotero-s3-sync",
   "type": "module",
-  "version": "3.1.0",
-  "description": "Zotero Plugin Template",
+  "version": "0.0.1",
+  "description": "Zotero plugin for storing attachment files on Amazon S3",
   "config": {
-    "addonName": "Zotero Plugin Template",
-    "addonID": "addontemplate@euclpts.com",
-    "addonRef": "addontemplate",
-    "addonInstance": "AddonTemplate",
-    "prefsPrefix": "extensions.zotero.addontemplate"
+    "addonName": "Zotero S3 Sync",
+    "addonID": "zotero-s3-sync@daichi-629",
+    "addonRef": "s3sync",
+    "addonInstance": "S3Sync",
+    "prefsPrefix": "extensions.zotero.s3sync"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/windingwind/zotero-plugin-template.git"
+    "url": "https://github.com/daichi-629/zotero-s3-attachment-plugin.git"
   },
-  "author": "windingwind",
+  "author": "daichi-629",
   "bugs": {
-    "url": "https://github.com/windingwind/zotero-plugin-template/issues"
+    "url": "https://github.com/daichi-629/zotero-s3-attachment-plugin/issues"
   },
-  "homepage": "https://github.com/windingwind/zotero-plugin-template#readme",
+  "homepage": "https://github.com/daichi-629/zotero-s3-attachment-plugin#readme",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "zotero-plugin serve",
+    "start:dev": "cross-env NODE_ENV=development zotero-plugin serve",
+    "start:prod": "cross-env NODE_ENV=production zotero-plugin serve",
     "build": "zotero-plugin build && tsc --noEmit",
+    "build:dev": "cross-env NODE_ENV=development zotero-plugin build && tsc --noEmit",
+    "build:prod": "cross-env NODE_ENV=production zotero-plugin build && tsc --noEmit",
     "lint:check": "prettier --check . && eslint .",
     "lint:fix": "prettier --write . && eslint . --fix",
     "release": "zotero-plugin release",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --testPathPattern=src/__tests__  --runInBand --detectOpenHandles --forceExit",
     "update-deps": "npm update --save"
   },
   "dependencies": {
-    "zotero-plugin-toolkit": "^5.0.0"
+    "@aws-sdk/client-s3": "^3.817.0",
+    "@aws-sdk/credential-providers": "^3.817.0",
+    "@aws-sdk/lib-storage": "^3.817.0",
+    "js-md5": "^0.8.3",
+    "zotero-plugin-toolkit": "^5.0.0-1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.25.1",
-    "@types/node": "^22.15.29",
-    "eslint": "^9.28.0",
+    "@eslint/js": "^9.27.0",
+    "@types/jest": "^29.5.14",
+    "@types/js-md5": "^0.7.2",
+    "@types/node": "^22.15.21",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.27.0",
+    "jest": "^29.7.0",
     "prettier": "^3.5.3",
+    "ts-jest": "^29.3.4",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.33.0",
+    "typescript-eslint": "^8.32.1",
     "zotero-plugin-scaffold": "^0.6.0",
-    "zotero-types": "^4.0.0"
+    "zotero-types": "^4.0.0-beta.10"
   },
   "prettier": {
     "printWidth": 80,

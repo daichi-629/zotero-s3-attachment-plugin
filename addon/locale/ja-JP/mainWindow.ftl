@@ -1,0 +1,11 @@
+item-section-example1-head-text =
+    .label = S3 Sync: アイテム同期状態
+item-section-example1-sidenav-tooltip =
+    .tooltiptext = S3ストレージとの同期状態を表示します
+item-section-example2-head-text =
+    .label = S3 Sync: 添付ファイル管理 [{$status}]
+item-section-example2-sidenav-tooltip =
+    .tooltiptext = S3ストレージに保存された添付ファイルの管理機能
+item-section-example2-button-tooltip =
+    .tooltiptext = S3同期機能を無効化
+item-info-row-example-label = S3同期ステータス

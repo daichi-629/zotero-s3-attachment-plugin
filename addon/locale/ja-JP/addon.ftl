@@ -1,0 +1,13 @@
+startup-begin = Zotero S3 Syncプラグインを初期化中...
+startup-finish = Zotero S3 Syncプラグインの準備が完了しました
+menuitem-label = Zotero S3 Sync: ファイル管理
+menupopup-label = S3 Sync メニュー
+menuitem-submenulabel = S3 Sync
+menuitem-filemenulabel = S3 Sync: ファイル操作
+menuitem-s3-manual-upload = S3に手動でアップロード
+menuitem-s3-download = S3からダウンロード
+prefs-title = S3 Sync
+prefs-table-title = 設定項目
+prefs-table-detail = 詳細
+tabpanel-lib-tab-label = ライブラリ同期
+tabpanel-reader-tab-label = 添付ファイル管理

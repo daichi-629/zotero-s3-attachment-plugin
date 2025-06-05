@@ -16,3 +16,11 @@ declare const rootURI: string;
 declare const addon: import("../src/addon").default;
 
 declare const __env__: "production" | "development";
+
+declare const debugNotify: (
+  message: string,
+  level?: "debug" | "info" | "warn" | "error" | "success",
+  functionName?: string,
+) => void;
+
+declare const notify: (title: string, message: string) => void;

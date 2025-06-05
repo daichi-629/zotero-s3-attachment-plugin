@@ -4,5 +4,21 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.words": [
+    "cloudflarestorage",
+    "onpaneload",
+    "prefpane",
+    "Prefs",
+    "Zotero",
+    "ztoolkit"
+  ],
+  "files.exclude": {
+    "**/*.js.map": true,
+    "**/*.ts.map": true,
+    "src/**/*.d.ts": true
+  },
+  "jest.runMode": {
+    "type": "on-demand"
+  }
 }

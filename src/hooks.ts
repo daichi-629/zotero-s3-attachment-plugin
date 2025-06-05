@@ -3,8 +3,7 @@ import { getString, initLocale } from "./utils/locale";
 import {
   registerPrefsScripts,
   registerPrefs,
-  openS3SettingsDialog,
-} from "./modules/preferenceScript";
+} from "./modules/preference/preferenceScript";
 import { Commands } from "./modules/commands";
 import { createZToolkit } from "./utils/ztoolkit";
 import { Notifier } from "./modules/notifier";
@@ -195,29 +194,7 @@ function onShortcuts(type: string): void {
       // 手動S3ダウンロードショートカット
       Commands.manualDownloadSelectedS3Attachments(attachmentHandler);
       break;
-    case "s3Settings":
-      // S3設定ウィンドウを開く
-      openS3SettingsDialog();
-      break;
     case "s3ConnectionTest":
-      Commands.testS3Connection(attachmentHandler);
-      break;
-    default:
-      break;
-  }
-}
-
-/**
- * ダイアログイベントのディスパッチャー
- * @param {string} type - ダイアログイベント種別
- * @returns {void}
- */
-function onDialogEvents(type: string): void {
-  switch (type) {
-    case "s3SettingsDialog":
-      openS3SettingsDialog();
-      break;
-    case "s3TestConnection":
       Commands.testS3Connection(attachmentHandler);
       break;
     default:
@@ -237,5 +214,4 @@ export default {
   onNotify,
   onPrefsEvent,
   onShortcuts,
-  onDialogEvents,
 };

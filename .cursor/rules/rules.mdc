@@ -1,0 +1,84 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# プロジェクト: Zotero 7 S3 添付ファイル保存プラグイン
+
+Zotero 7 プラグインで、添付ファイルをローカルストレージやZoteroクラウドの代わりにAWS S3に保存します。このプロジェクトは、Zotero 7の新しいプラグインアーキテクチャを活用することを目的としています。
+
+# 最重要ルール
+-   コードを編集する前に**必ず**現在のコードベースを理解し、詳細な実装計画を建ててから実装してください。
+-   **タスク管理・構造管理・テスト駆動開発を厳守してください。**
+
+## コード編集ルール
+-   コードの編集は、既存の構造を尊重し、必要な箇所に限定してください。ファイル全体を削除して書き直すような破壊的な編集は避けてください。
+-   APIを使用する際は、常に公式ドキュメントを読み仕様を正しく把握してから使用してください。
+-   実装しようとしている機能がライブラリで実現できないか常に調べてください。ライブラリで実現できる場合はライブラリを使用してください。
+-   実装しようとしている機能と同様の機能が実装されていないかコードベースを確認してください。重複して実装しないでください。
+    - 既存の実装を改善することを第一に検討してください。
+-   明確で、モジュール化され、十分にコメントが付けられたコードを記述してください。
+-   関数、クラスの定義の際には必ずJSDoc形式のコメントを記述してください。
+
+## **タスク管理**
+[tasks.md](mdc:tasks.md) に開発に必要なタスクを全て書き込むこと。
+タスクの実装が完了したら、必ず [tasks.md](mdc:tasks.md) を編集し、該当タスクを完了済みに更新すること。
+実装中に新たなタスクが発生した場合は、 [tasks.md](mdc:tasks.md) の適切な箇所に追記すること。
+
+## **構造管理**
+[architecture.md](mdc:architecture.md) に現在のコードの構造を記述し、維持すること。
+コードを編集した場合は、必ず [architecture.md](mdc:architecture.md) を確認し、変更点があれば更新すること。
+
+## **関連ドキュメント (Reference Documentation)**
+
+-   **Zotero 7 for Developers:** @[https://www.zotero.org/support/dev/zotero_7_for_developers](mdc:https:/www.zotero.org/support/dev/zotero_7_for_developers)
+-   **Zotero Developer Documentation (General):** @[https://www.zotero.org/support/dev/](mdc:https:/www.zotero.org/support/dev)
+-   **AWS SDK for JavaScript v3 Developer Guide:** @[https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/](mdc:https:/docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide)
+-   **MDN Web Docs (JavaScript, DOM, HTML):** @[https://developer.mozilla.org/](mdc:https:/developer.mozilla.org)
+-   **使用しているZotero 7 プラグインテンプレート @@https://github.com/windingwind/zotero-plugin-template
+-   **Zotero plugin toolkit @https://github.com/windingwind/zotero-plugin-toolkit
+
+
+## **コーディングルールとAIへの指示 (Coding Rules and AI Instructions)**
+
+### **テスト駆動開発 (TDD) ルール**
+コーディングは以下のテスト駆動開発プロセスを厳守すること。
+ユニットテストには`Jest`ライブラリを使用してください。
+
+1.  **テストファースト (Test First)**: 新しい機能の実装やバグ修正に着手する前に、必ずその要件を検証するための自動テスト（ユニットテスト、結合テストなど）を作成してください。このテストは、最初は失敗する状態でなければなりません。
+2.  **最小限のコード (Minimum Code)**: テストが失敗することを確認した後、そのテストを成功させるために必要最小限のプロダクションコードを記述してください。
+3.  **リファクタリング (Refactor)**: テストが成功したら、コードの可読性や保守性を向上させるためにリファクタリングを行ってください。リファクタリング後も、全てのテストが成功し続けることを確認してください。
+4.  **テストの対象範囲 (Test Scope)**:
+    * **ユニットテスト (Unit Tests)**: 個々の関数やモジュールが正しく動作することを検証します。
+    * **結合テスト (Integration Tests)**: モジュール間の連携、特にZotero APIやAWS S3 SDKとの連携部分を重点的にテストします。
+    * UIコンポーネントの動作も、可能な範囲でテストの対象とします。
+5.  **テストファイルの規約 (Test File Conventions)**: テストコードは、テスト対象のソースファイルと同じディレクトリ、または専用の `__tests__`ディレクトリ内に配置してください。ファイル名は、`[元のファイル名].test.ts` を使用してください。
+6.  **テストカバレッジ (Test Coverage)**: 高いテストカバレッジを目指し、主要なロジックパスがテストによって網羅されるようにしてください。
+7.  **モックの使用 (Use of Mocks)**: 外部依存（特にAWS S3 APIやZoteroのコア機能など）のテストにおいては、適切なモックライブラリ（例: Jestのモック機能）を活用してください。
+
+
+
+### **Zotero連携ルール (Zotero Integration)**
+
+-   ZoteroのJavaScript API、Zotero plugin toolkitを使用し、Zoteroの機能を利用してください。
+-   Zotero plugin toolkitを優先して使用し、必要なときのみZoteroのJavaScript APIを使用してください。
+-   Zotero plugin toolkit、ZoteroのJavaScript APIを使用する際はAPIの仕様をweb検索し、正しく使用してください。
+-   プラグイン設定の永続化には [prefs.ts](mdc:src/utils/prefs.ts)の `setpref, getpref, crearpref` を使用してください。 [prefs.js](mdc:addon/prefs.js)の更新も必ず行ってください。
+- 開発中のデバッグには `ztoolkit.log` は適宜利用してください。
+- ユーザーへの通知は `notify`関数を使用してください。`notify`関数の型定義は以下の通りです。
+  '''
+  declare const notify: (title: string, message: string) => void;
+  '''
+-   Zotero 7のプラグインアーキテクチャ（ブートストラップ型拡張機能、`manifest.json`、プログラムによるUI変更）に厳密に従ってください。
+
+
+### その他
+-   S3とのすべてのやり取りにはAWS SDK for JavaScript v3を使用してください。バンドルサイズを最小限に抑えるため、必要なクライアント/コマンド（例: `@aws-sdk/client-s3`, `@aws-sdk/lib-storage`）のみをインポートしてください。
+-   特にネットワークリクエスト、S3 API呼び出し、ファイル操作については、包括的なエラーハンドリングを実装してください。
+-   @eslint.config.mjs のコーデイングスタイルに従ってください。
+
+### **避けるべきこと (Avoid)**
+
+-   Zotero 7より前のバージョンからの非推奨Zotero APIを使用しないでください。
+-   UIの変更やコンポーネント登録にXULオーバーレイや `chrome.manifest` を使用しないでください。代わりに `bootstrap.js` 内のプログラム的なメソッドを使用してください。
+-   メインスレッドでの同期的な長時間実行処理は絶対に避けてください。常に非同期処理を優先してください。

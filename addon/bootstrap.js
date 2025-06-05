@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-
 /**
  * Most of this code is from Zotero team's official Make It Red example[1]
  * or the Zotero 7 documentation[2].
@@ -13,6 +12,7 @@ function install(data, reason) {}
 
 async function startup({ id, version, resourceURI, rootURI }, reason) {
   await Zotero.initializationPromise;
+  Zotero.debug("startup");
 
   // String 'rootURI' introduced in Zotero 7
   if (!rootURI) {
@@ -37,6 +37,30 @@ async function startup({ id, version, resourceURI, rootURI }, reason) {
     rootURI,
   };
   ctx._globalThis = ctx;
+
+  ctx._globalThis._console = ctx.console;
+  ctx._console = ctx.console;
+  // undefined errorを防ぐために形のみの定義
+  ctx._globalThis.console = {
+    log: (...args) => {},
+    error: (...args) => {},
+    warn: (...args) => {},
+    info: (...args) => {},
+    debug: (...args) => {},
+    trace: (...args) => {},
+    dir: (...args) => {},
+    dirxml: (...args) => {},
+    table: (...args) => {},
+    clear: (...args) => {},
+    count: (...args) => {},
+    countReset: (...args) => {},
+    group: (...args) => {},
+    groupCollapsed: (...args) => {},
+    groupEnd: (...args) => {},
+  };
+
+  // グローバルにconsoleを設定
+  ctx.console = ctx._globalThis.console;
 
   Services.scriptloader.loadSubScript(
     `${rootURI}/content/scripts/__addonRef__.js`,

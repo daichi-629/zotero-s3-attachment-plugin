@@ -1,11 +1,11 @@
 item-section-example1-head-text =
-    .label = 插件模板: 条目信息
+    .label = S3 同步: 条目同步状态
 item-section-example1-sidenav-tooltip =
-    .tooltiptext = 这是插件模板面板(条目信息)
+    .tooltiptext = 显示与 S3 存储的同步状态
 item-section-example2-head-text =
-    .label = 插件模板: 阅读器[{$status}]
+    .label = S3 同步: 附件管理 [{$status}]
 item-section-example2-sidenav-tooltip =
-    .tooltiptext = 这是插件模板面板(阅读器)
+    .tooltiptext = 管理存储在 S3 的附件文件
 item-section-example2-button-tooltip =
-    .tooltiptext = 移除此面板
-item-info-row-example-label = 示例行
+    .tooltiptext = 禁用 S3 同步功能
+item-info-row-example-label = S3 同步状态

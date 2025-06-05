@@ -9,6 +9,11 @@
     "48": "content/icons/favicon@0.5x.png",
     "96": "content/icons/favicon.png"
   },
+  "permissions": [
+    "storage",
+    "https://*.amazonaws.com/*",
+    "https://*.s3.amazonaws.com/*"
+  ],
   "applications": {
     "zotero": {
       "id": "__addonID__",
